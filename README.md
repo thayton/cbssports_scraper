@@ -16,5 +16,34 @@ from the site http://www.cbssports.com/nba/playerrankings
 
     pip install -r requirements.txt
 
-  
+    cd scraper
+    python manage.py migrate  
+
+## Usage
+
+Help
+
+```
+$ ./scraper.py -h
+usage: scraper.py [-h] [-s] [-e]
+
+optional arguments:
+  -h, --help    show this help message and exit
+  -s, --scrape  do a fresh scrape of the top 30 players for positions
+                PG/SG/SF/PF/C
+  -e, --export  export results as CSV
+```
+
+Launch a scrape
+
+```
+(venv)Todds-MBP:cbssports_scraper mhayton$ ./scraper.py -s
+Scraping position links
+Scraping players for position PG
+Scraping players for position SG
+Scraping players for position SF
+```
+
+Export scrape results from database in CSV format into a file named players.csv
+
   
