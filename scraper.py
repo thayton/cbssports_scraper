@@ -104,18 +104,11 @@ class CbsSportsScraper(object):
     def export_csv(self):
         with open('players.csv', 'wb') as csvfile:
             writer = csv.writer(csvfile)
-            header = False
+            writer.writerow(['player name', 'position', 'team', 'birthdate'])
 
             for player in Player.objects.all():
-                fields = player._meta.get_all_field_names()
-                fields.remove('position_id')
-                fields.remove('id')
-                
-                if not header:
-                    header = True
-                    writer.writerow(fields)
-
-                row = [ getattr(player, field) for field in fields ]
+                fields = [ 'name', 'position', 'team_name', 'birthdate' ]
+                row = [ str(getattr(player, field)) for field in fields ]
                 writer.writerow(row)
 
 if __name__ == '__main__':
