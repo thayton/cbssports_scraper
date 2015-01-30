@@ -2,6 +2,7 @@
 
 import re
 import os
+import csv
 import sys
 import django
 import datetime
@@ -100,6 +101,23 @@ class CbsSportsScraper(object):
             print 'Scraping player %s' % player
             self.scrape_player_stats(player)
 
+    def export_csv(self):
+        with open('players.csv', 'wb') as csvfile:
+            writer = csv.writer(csvfile)
+            header = False
+
+            for player in Player.objects.all():
+                fields = player._meta.get_all_field_names()
+                fields.remove('position_id')
+                fields.remove('id')
+                
+                if not header:
+                    header = True
+                    writer.writerow(fields)
+
+                row = [ getattr(player, field) for field in fields ]
+                writer.writerow(row)
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("-s", "--scrape", help="do a fresh scrape of the top 30 players for positions PG/SG/SF/PF/C",
@@ -109,4 +127,5 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     scraper = CbsSportsScraper()
-    scraper.scrape()
+    scraper.export_csv()
+#    scraper.scrape()
