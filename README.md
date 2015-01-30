@@ -37,19 +37,29 @@ optional arguments:
 Launch a scrape
 
 ```
-(venv)Todds-MBP:cbssports_scraper mhayton$ ./scraper.py -s
+$ ./scraper.py -s
 Scraping position links
 Scraping players for position PG
 Scraping players for position SG
 Scraping players for position SF
+...
 ```
 
 Export scrape results from database in CSV format into a file named players.csv
 
 ```
 $ ./scraper.py -e
-(venv)Todds-MBP:cbssports_scraper mhayton$ ls -l players.csv 
+$ ls -l players.csv 
 -rw-r--r--  1 mhayton  staff  6872 Jan 30 15:19 players.csv
-(venv)Todds-MBP:cbssports_scraper mhayton$ wc -l players.csv 
+$ wc -l players.csv 
      151 players.csv
+$ head players.csv 
+player name,position,team,birthdate
+Stephen Curry,PG,Golden State Warriors,1988-03-14
+Damian Lillard,PG,Portland Trail Blazers,1990-07-05
+Chris Paul,PG,Los Angeles Clippers,1985-05-06
+Kyrie Irving,PG,Cleveland Cavaliers,1992-03-23
+Kyle Lowry,PG,Toronto Raptors,1986-03-25
+...
+
 ```  
