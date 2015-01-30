@@ -1,5 +1,11 @@
 #!/usr/bin/env python
 
+"""
+Python script for scraping the top 30 players from http://www.cbssports.com/nba/playerrankings
+"""
+
+__author__ = 'Todd Hayton'
+
 import re
 import os
 import csv
@@ -29,6 +35,9 @@ class CbsSportsScraper(object):
         self.positions = ['PG', 'SG', 'SF', 'PF', 'C' ]
 
     def scrape_position_links(self):
+        '''
+        Get the list of links for all positions in self.positions
+        '''
         self.br.open(self.url)
 
         for p in self.positions:
@@ -42,6 +51,9 @@ class CbsSportsScraper(object):
             pos.save()
 
     def scrape_player_stats(self, player):        
+        '''
+        Scrape birthdate and teamname for the given player
+        '''
         self.br.open(player.url)
 
         s = BeautifulSoup(self.br.response().read())
@@ -63,6 +75,9 @@ class CbsSportsScraper(object):
         player.save()
 
     def scrape_players_for_position(self, position):
+        '''
+        Scrape the top-30 players for the given position
+        '''
         self.br.open(position.url)        
         
         s = BeautifulSoup(self.br.response().read())
@@ -87,6 +102,10 @@ class CbsSportsScraper(object):
             player.save()
 
     def scrape(self):
+        '''
+        Remove all data currently stored in the database and 
+        do a fresh scrape
+        '''
         Position.objects.all().delete()
         Player.objects.all().delete()
 
@@ -102,6 +121,10 @@ class CbsSportsScraper(object):
             self.scrape_player_stats(player)
 
     def export_csv(self):
+        '''
+        Do a csv-export the players currently stored in the database 
+        into a file named players.csv
+        '''
         with open('players.csv', 'wb') as csvfile:
             writer = csv.writer(csvfile)
             writer.writerow(['player name', 'position', 'team', 'birthdate'])
@@ -113,12 +136,21 @@ class CbsSportsScraper(object):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
+
     parser.add_argument("-s", "--scrape", help="do a fresh scrape of the top 30 players for positions PG/SG/SF/PF/C",
                         action="store_true")
     parser.add_argument("-e", "--export", help="export results as CSV",
                         action="store_true")
-    args = parser.parse_args()
 
     scraper = CbsSportsScraper()
-    scraper.export_csv()
-#    scraper.scrape()
+    args = parser.parse_args()
+
+    if args.scrape:
+        scraper.scrape()
+
+    if args.export:
+        scraper.export_csv()
+
+    if not (args.scrape or args.export):
+        parser.error('No action requested, add -scrape or -export (or both)')
+        
