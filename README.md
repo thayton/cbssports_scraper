@@ -7,14 +7,14 @@ PG - SG - SF - PF - C
 from the site http://www.cbssports.com/nba/playerrankings
 
 ## Deployment
-  git clone git@github.com:thayton/cbssports_scraper.git
+    git clone git@github.com:thayton/cbssports_scraper.git
 
-  cd cbssports_scraper
+    cd cbssports_scraper
 
-  virtualenv venv 
-  source venv/bin/activate
+    virtualenv venv 
+    source venv/bin/activate
 
-  pip install -r requirements.txt
+    pip install -r requirements.txt
 
   
   
