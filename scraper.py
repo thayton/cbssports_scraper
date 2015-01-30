@@ -20,10 +20,6 @@ django.setup()
 from django.core.exceptions import ObjectDoesNotExist
 from cbssports_scraper.models import *
 
-TEAMS = {
-    'GS': ''
-}
-
 class CbsSportsScraper(object):
     def __init__(self):
         self.cnt = 30
@@ -45,7 +41,7 @@ class CbsSportsScraper(object):
             pos.save()
 
     def scrape_player_stats(self, player):        
-        self.br.oepn(player.url)
+        self.br.open(player.url)
 
         s = BeautifulSoup(self.br.response().read())
         f = lambda x: x.name == 'dt' and x.text == 'Birthdate:'
@@ -55,7 +51,7 @@ class CbsSportsScraper(object):
 
         (m,d,y) = dd.text.split('/')
 
-        player.birthdate = datetime.date(int(m), int(d), int(y))
+        player.birthdate = datetime.date(month=int(m), day=int(d), year=int(y))
 
         f = lambda x: x.name == 'dt' and x.text == 'Team:'
 
@@ -75,18 +71,29 @@ class CbsSportsScraper(object):
             td = pa.findParent('td')
             ta = td.findAll('a')[-1]
 
+            b = pa.findPrevious('b')
+            rank = int(b.text.split('.')[0])
+
             team_url = urlparse.urljoin(self.br.geturl(), ta['href'])
             player_url = urlparse.urljoin(self.br.geturl(), pa['href'])
 
             player = Player(position=position)
             player.name = pa.text.strip()
+            player.rank = rank
             player.url = player_url
             player.team_code = ta.text.strip()
             player.team_url = team_url
             player.save()
 
     def scrape(self):
-        pass
+        self.scrape_position_links()
+
+        for position in Position.objects.all():
+            self.scrape_players_for_position(position)
+            break
+
+        for player in Player.objects.all():
+            self.scrape_player_stats(player)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
