@@ -46,4 +46,10 @@ Scraping players for position SF
 
 Export scrape results from database in CSV format into a file named players.csv
 
-  
+```
+$ ./scraper.py -e
+(venv)Todds-MBP:cbssports_scraper mhayton$ ls -l players.csv 
+-rw-r--r--  1 mhayton  staff  6872 Jan 30 15:19 players.csv
+(venv)Todds-MBP:cbssports_scraper mhayton$ wc -l players.csv 
+     151 players.csv
+```  
