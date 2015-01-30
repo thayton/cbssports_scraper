@@ -86,13 +86,18 @@ class CbsSportsScraper(object):
             player.save()
 
     def scrape(self):
+        Position.objects.all().delete()
+        Player.objects.all().delete()
+
         self.scrape_position_links()
+        print 'Scraping position links'
 
         for position in Position.objects.all():
+            print 'Scraping players for position %s' % position
             self.scrape_players_for_position(position)
-            break
 
         for player in Player.objects.all():
+            print 'Scraping player %s' % player
             self.scrape_player_stats(player)
 
 if __name__ == '__main__':

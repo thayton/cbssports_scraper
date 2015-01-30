@@ -3,7 +3,7 @@ from django.db import models
 
 # Create your models here.
 class Position(models.Model):
-    name = models.CharField(max_length=64)
+    name = models.CharField(max_length=64, unique=True)
     url = models.URLField(max_length=256)
 
     def __str__(self):
@@ -13,7 +13,7 @@ class Player(models.Model):
     position = models.ForeignKey(Position)
     name = models.CharField(max_length=64)
     rank = models.IntegerField(default=0)
-    url = models.URLField(max_length=256)
+    url = models.URLField(max_length=256, unique=True)
     team_name = models.CharField(max_length=64)
     team_url  = models.URLField(max_length=256)
     team_code = models.CharField(max_length=3)
