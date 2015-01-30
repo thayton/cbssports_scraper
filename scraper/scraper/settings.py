@@ -36,7 +36,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'cbssports_scraper,
+    'cbssports_scraper',
 )
 
 MIDDLEWARE_CLASSES = (
